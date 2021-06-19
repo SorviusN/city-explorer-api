@@ -5,6 +5,7 @@
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+This is the server-side code for city explorer. It receives data from a client via cors and express, sends that data out to the appropriate API (if needed, else it retreives from the cache) and finally returns the data in the form of a response to the client.
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
