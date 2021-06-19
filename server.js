@@ -18,8 +18,9 @@ const getMovies = require('./routeHandlers/getMovies');
 app.get('/', root);
 
 function weatherHandler(req, res) {
-  const { lat, lon } = req.query;
-  weather(lat, lon)
+  const lat = req.query.lat;
+  const lon = req.query.lon;
+  getWeather(lat, lon)
     .then(summaries => res.send(summaries))
     .catch((error) => {
       console.error(error);
@@ -38,19 +39,6 @@ app.get('/*',(res) => {
 });
 
 // config part 2
-app.listen(process.env.PORT, () => {console.log(console.log(`Server up on ${process.env.PORT}`)); });
+app.listen(process.env.PORT, () => {console.log(`Server up on ${process.env.PORT}`);});
 
-// ---- initial config ----
-//const express = require('express');
-//const app = express();
 
-//require('dotenv').config();
-
-//referencing our PORT from .env file
-//const PORT = process.env.PORT;
-
-const PORT = process.env.PORT;
-// ---- middleware (used to let client and server talk to eachother) ---
-// telling our express app that we are using cors (lets other servers talk to other servers)
-//const cors = require('cors');
-//app.use(cors());
