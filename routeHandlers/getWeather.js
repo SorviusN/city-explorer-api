@@ -13,21 +13,22 @@ const weatherKey = process.env.WEATHER_API_KEY;
 //exporting the getWeather folder for use in other areas.
 module.exports = getWeather;
 
-//starts by setting a key for the cache as well as creating an axios request to
+//starts by setting a key for the cache as well as creating an axios request
 function getWeather(lat, lon){
-  const key = 'weather-' + lat + lon;
-  const url = axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${weatherKey}`);
+  const key = 'weather-' + request.query.lat + request.query.lon;
+  const url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${weatherKey}`;
 
   if (cache[key] && (Date.now() - cache[key].timestamp < 50000)) {
-    console.log('Cache hit!');
+    console.log('Cache hit!', cache[key]);
   }
   else {
     console.log('Cache miss! Creating a cache for the item.');
     cache[key] = {}; //initializing cache at whatever the key is.
     cache[key].timestamp = Date.now(); //setting the timestamp value of the object in cache
-    cache[key].data = axios.get(url) // setting the data at the cache object.
-      .then(response => parseWeather(response.body)); 
+    cache[key].data = axios.get(url)// setting the data at the cache object.
+      .then(response => parseWeather(response.body));
   }
+  console.log(cache[key].data);
   return cache[key].data;
 }
 

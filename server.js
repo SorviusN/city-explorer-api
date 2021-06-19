@@ -17,9 +17,10 @@ const getMovies = require('./routeHandlers/getMovies');
 //referencing our root file to perform all of the code actions.
 app.get('/', root);
 
+app.get('/weather', weatherHandler);
+
 function weatherHandler(req, res) {
-  const lat = req.query.lat;
-  const lon = req.query.lon;
+  const { lat, lon } = req.query;
   getWeather(lat, lon)
     .then(summaries => res.send(summaries))
     .catch((error) => {
@@ -27,8 +28,6 @@ function weatherHandler(req, res) {
       res.status(200).send('Sorry. Something went wrong!');
     });
 }
-
-app.get('/weather', weatherHandler);
 
 //Getting the movie data. References
 app.get('/movie', getMovies);
