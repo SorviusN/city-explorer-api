@@ -8,6 +8,7 @@ class Weather {
   constructor(day) {
     this.date = day.valid_date;
     this.description =`low of ${day.low_temp}, high of ${day.high_temp} with ${day.weather.description}`;
+    this.key = day.valid_date;
   }
 }
 
@@ -29,8 +30,8 @@ let getWeather = async(lat, lon) => {
     console.log('Cache miss! Creating a cache for the item...');
     cache[key] = {}; //initializing cache at whatever the key is.
     cache[key].timestamp = Date.now(); //setting the timestamp value of the object in cache
-    let weatherData = await axios.get(url);// setting the data at the cache object
-    cache[key].data = parseWeather(weatherData.data.data);
+    cache[key].data = await axios.get(url)// setting the data at the cache object
+      .then (response => parseWeather(response.data));
   }
   return cache[key].data;
 };
@@ -38,12 +39,11 @@ let getWeather = async(lat, lon) => {
 //this function is called if the cache is not present when searched (in the .then part of the above function. It returns an array of Weather objects with the appropriate data.);
 function parseWeather(weatherData) {
   try {
-    const weatherSummaries = weatherData.map(day => {
+    const weatherSummaries = weatherData.data.map(day => {
       return new Weather(day);
     });
     return Promise.resolve(weatherSummaries);
-  }
-  catch (e) {
+  } catch (e) {
     return Promise.reject(e);
   }
 }

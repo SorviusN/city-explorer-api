@@ -11,7 +11,7 @@ app.use(cors());
 //File routing to each routeHandler
 const root = require('./routeHandlers/root');
 const weather = require('./routeHandlers/weather.js');
-const getMovies = require('./routeHandlers/getMovies.js');
+const movies = require('./routeHandlers/movies.js');
 
 //referencing our root file to perform all of the code actions.
 app.get('/', root);
@@ -21,17 +21,25 @@ app.get('/weather', weatherHandler);
 function weatherHandler(request, response) {
   const lat = request.query.lat;
   const lon = request.query.lon;
-  try {
-    console.log(weather(lat, lon));
-    response.send(weather(lat, lon));
-  }
-  catch(err){
-    console.error(err);
-    response.status(200).send('Sorry, something went wrong!');
-  }
+  weather(lat, lon)
+    .then(summaries => response.send(summaries))
+    .catch((error) => {
+      console.error(error);
+      response.status(200).send('Sorry, Something isn\'t quite right');
+    });
+}
+
+function movieHandler(request, response) {
+  const city = request.query.city;
+  movies(city)
+    .then(summaries => response.send(summaries))
+    .catch((error) => {
+      console.error(error);
+      response.status(200).send('Sorry, Something isn\'t quite right');
+    });
 }
 //Getting the movie data. References
-app.get('/movie', getMovies);
+app.get('/movie', movieHandler);
 
 //any server that isn't specified above defaults to below.
 app.get('/*',(res) => {
